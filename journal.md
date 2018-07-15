@@ -1,4 +1,4 @@
-#Journal
+# Journal
 
 14/07/2018
 - Scelto l'oggetto da vendere: penna biro.
