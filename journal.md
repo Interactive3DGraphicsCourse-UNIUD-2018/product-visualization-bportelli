@@ -1,4 +1,3 @@
-#Journal
 # Journal
 
 14/07/2018
@@ -7,9 +6,11 @@
 (Boligrafo by Nicolas Alex Capdevielle, [link](https://sketchfab.com/models/25fb4c1e876e4c869249598a04ba0f48)).
 - Caricato il modello e testato gli shader predefiniti di Three.js.
 - Modificato esempio l17-shadingWithAO.html visto a lezione per testare il modello e osservare la resa delle texture sul modello. Ho scoperto che il modello non era UV-mappato (contrariamente a quanto indicato sul sito). Ho quindi proceduto a UV-mappare il modello in Maya 2017.
-<<<<<<< HEAD
 
 15/07/2018
-- Modificato shader in modo da accettare fino a quattro fonti di luce (oltre alla luce ambientale).- Modificato shader in modo da accettare fino a quattro fonti di luce (oltre alla luce ambientale).
-=======
->>>>>>> a1bfff6a8363dea973979dbe5a8f61209a3fa747
+- Modificato shader in modo da accettare fino a quattro fonti di luce (oltre alla luce ambientale).
+
+17/07/2018
+- Modificato shader aggiungendo riflessioni per metalli
+
+18/07/2018

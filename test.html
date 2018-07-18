@@ -1,6 +1,31 @@
 <html>
 	<head>
 		<title>Load OBJ File</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				background-color: #f0f0f0;
+				margin: 0px;
+				overflow: hidden;
+			}
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				color: #222;
+				padding: 5px;
+				font-family: Monospace;
+				font-size: 13px;
+				text-align: center;
+			}
+			a {
+				color: #000;
+				text-decoration: none;
+			}
+			a:hover {
+				color: #0080ff;
+			}
+		</style>
 		<style>
 		body {
 			font-family: Monospace;
@@ -30,6 +55,8 @@
 		-->
 		
 		<script type="text/x-glsl" id="material_vertex">
+		precision highp float;
+		precision highp int;
 		varying vec3 vNormal;
 		varying vec3 vPosition;
 		varying vec2 uVv;
@@ -41,8 +68,12 @@
 			gl_Position = projectionMatrix * vPos;
 		}
 		</script>
+		
 
 		<script type="text/x-glsl" id="material_fragment">
+		
+			precision highp float;
+			precision highp int;
 			varying vec3 vNormal;
 			varying vec3 vPosition;
 			varying vec2 uVv;
@@ -57,11 +88,38 @@
 			uniform vec2 normalScale;
 			uniform vec2 textureRepeat;
 			uniform vec3 surfCdiff;
+			uniform samplerCube envMap;
 			const float PI = 3.14159;
 			vec3 cdiff;
 			vec3 cspec;
 			float roughness;
 			vec3 outRadiances[4];
+			
+			#define saturate(a) clamp( a, 0.0, 1.0 )
+			float pow2( const in float x ) { return x*x; }
+			float getSpecularMIPLevel( const in float blinnShininessExponent, const in int maxMIPLevel ) {
+		 		float maxMIPLevelScalar = float( maxMIPLevel );
+		 		float desiredMIPLevel = maxMIPLevelScalar - 0.79248 - 0.5 * log2( pow2( blinnShininessExponent ) + 1.0 );
+		 		return clamp( desiredMIPLevel, 0.0, maxMIPLevelScalar );
+		 	}
+			float GGXRoughnessToBlinnExponent( const in float ggxRoughness ) {
+				return ( 2.0 / pow2( ggxRoughness + 0.0001 ) - 2.0 );
+			}
+			// http://en.wikibooks.org/wiki/GLSL_Programming/Applying_Matrix_Transformations
+			vec3 inverseTransformDirection( in vec3 dir, in mat4 matrix ) {
+				return normalize( ( vec4( dir, 0.0 ) * matrix ).xyz );
+			}
+			vec3 BRDF_Specular_GGX_Environment( vec3 normal, vec3 viewDir, const in vec3 cspec, const in float roughness ) {
+				float dotNV = saturate( dot( normal, viewDir ) );
+				const vec4 c0 = vec4( - 1, - 0.0275, - 0.572, 0.022 );
+				const vec4 c1 = vec4( 1, 0.0425, 1.04, - 0.04 );
+				vec4 r = roughness * c0 + c1;
+				float a004 = min( r.x * r.x, exp2( - 9.28 * dotNV ) ) * r.x + r.y;
+				vec2 AB = vec2( -1.04, 1.04 ) * a004 + r.zw;
+				return cspec * AB.x + AB.y;
+			}
+			
+			
 			vec3 FSchlick(float lDoth) {
 				return (cspec + (vec3(1.0)-cspec)*pow(1.0 - lDoth,5.0));
 			}
@@ -77,7 +135,7 @@
 					float k = roughness*roughness;
 					return G1(nDotl,k)*G1(nDotv,k);
 			}
-			#extension GL_OES_standard_derivatives : enable
+			
 			vec3 perturbNormal2Arb( vec3 eye_pos, vec3 surf_norm ) {
 				vec3 q0 = dFdx( eye_pos.xyz );
 				vec3 q1 = dFdy( eye_pos.xyz );
@@ -92,11 +150,32 @@
 				return normalize( tsn * mapN );
 			}
 			void main() {
+			
+				vec3 n = perturbNormal2Arb( vPosition, normalize( vNormal ));
+				vec3 v = normalize( -vPosition);
+
+				vec3 vReflect = reflect(vPosition,n);
+				vec3 r = inverseTransformDirection( vReflect, viewMatrix );
+				vec3 worldN = inverseTransformDirection( n, viewMatrix );
+
+				cdiff = texture2D( diffuseMap, uVv*textureRepeat ).rgb;
+				cdiff = pow( cdiff, vec3(2.2));	 // texture in sRGB, linearize			
+				cdiff = (cdiff * surfCdiff);
+				cspec = texture2D( specularMap, uVv*textureRepeat ).rgb;
+				cspec = pow( cspec, vec3(2.2));  // texture in sRGB, linearize			
+				roughness = texture2D( roughnessMap, uVv*textureRepeat).r; // no need to linearize roughness map
+
+				float blinnShininessExponent = GGXRoughnessToBlinnExponent(roughness);
+				float specularMIPLevel = getSpecularMIPLevel(blinnShininessExponent, 8);
+				vec3 envLight = textureCubeLodEXT( envMap, vec3(-r.x, r.yz), specularMIPLevel ).rgb;
+				// texture in sRGB, linearize
+				envLight = pow( envLight, vec3(2.2));
+				vec3 outRadiance_env = envLight*BRDF_Specular_GGX_Environment(n, v, cspec, roughness);
+				
+				
 				for (int i=0; i<4; i++) {
 					vec4 lPosition = viewMatrix * vec4( pointLightPositions[i], 1.0 );
 					vec3 l = normalize(lPosition.xyz - vPosition.xyz);
-					vec3 n = perturbNormal2Arb( vPosition, normalize( vNormal ));
-					vec3 v = normalize( -vPosition);
 					vec3 h = normalize( v + l);
 					// small quantity to prevent divisions by 0
 					float nDotl = max(dot( n, l ),0.000001);
@@ -104,21 +183,37 @@
 					float nDoth = max(dot( n, h ),0.000001);
 					float vDoth = max(dot( v, h ),0.000001);
 					float nDotv = max(dot( n, v ),0.000001);
-					cdiff = texture2D( diffuseMap, uVv*textureRepeat ).rgb;
-					cdiff = pow( cdiff, vec3(2.2));	 // texture in sRGB, linearize			
-					cdiff = (cdiff * surfCdiff);
-					cspec = texture2D( specularMap, uVv*textureRepeat ).rgb;
-					cspec = pow( cspec, vec3(2.2));  // texture in sRGB, linearize			
-					roughness = texture2D( roughnessMap, uVv*textureRepeat).r; // no need to linearize roughness map				
 					vec3 fresnel = FSchlick(lDoth);
 					vec3 BRDF = (vec3(1.0)-fresnel)*cdiff/PI + fresnel*GSmith(nDotv,nDotl)*DGGX(nDoth,roughness*roughness)/
 						(4.0*nDotl*nDotv);
-					outRadiances[i] = PI* clights[i] * nDotl * BRDF + ambientLight*cdiff*texture2D( aoMap, uVv * textureRepeat ).xyz;
+					outRadiances[i] = PI* clights[i] * nDotl * BRDF ;
 				}
-				vec3 outRadiance = outRadiances[0]+outRadiances[1]+outRadiances[2]+outRadiances[3];
+				
+				
+				vec3 irradiance = textureCubeLodEXT( envMap, worldN, specularMIPLevel*6. ).rgb;
+				irradiance = pow( irradiance, vec3(2.2));
+				
+				vec3 outRadiance_ = saturate(outRadiances[0]+outRadiances[1]+outRadiances[2]+outRadiances[3]) + (irradiance+ambientLight)*cdiff*texture2D( aoMap, uVv * textureRepeat ).xyz;
+
+				
+				vec3 outRadiance;				
+				
+				if (cspec.r < .5) { outRadiance.r = outRadiance_.r; } else { outRadiance.r = outRadiance_env.r; }
+				if (cspec.g < .5) { outRadiance.g = outRadiance_.g; } else { outRadiance.g = outRadiance_env.g; }
+				if (cspec.b < .5) { outRadiance.b = outRadiance_.b; } else { outRadiance.b = outRadiance_env.b; }
+				
+				//vec3 outRadiance_ = saturate(outRadiances[0]+outRadiances[1]+outRadiances[2]+outRadiances[3] + (envLight+ambientLight)*cdiff*texture2D( aoMap, uVv * textureRepeat ).xyz);
+				//outRadiance = outRadiance_;
+				//outRadiance = outRadiance_env*cdiff;
+				//outRadiance = (vec3(1.0)-cspec)*outRadiance_+ cspec*outRadiance_env;
+				//outRadiance = outRadiance_ + outRadiance_env;
+				//outRadiance = cdiff*envLight;
+				//outRadiance = (vec3(1.0)-cspec)*outRadiance_+ cspec*outRadiance_env;
+				//outRadiance = outRadiance_pla;
+				
 				// gamma encode the final value
 				gl_FragColor = vec4(pow( outRadiance, vec3(1.0/2.2)), 1.0);
-			}
+			} 
 		</script>
 		
 		<!--
@@ -155,11 +250,39 @@
 			controls = new THREE.OrbitControls( camera, renderer.domElement );
 			controls.addEventListener( 'change', Render );
 			
+			var cubeTextureLoader = new THREE.CubeTextureLoader();
+			var cubemap = cubeTextureLoader.load([
+				'textures/11635.jpg', 'textures/11635.jpg',
+				'textures/top.jpg', 'textures/bot.jpg',
+				'textures/11635.jpg', 'textures/11635.jpg'
+			]);
+			var white_cubemap = cubeTextureLoader.load([
+				'textures/white.jpg', 'textures/white.jpg',
+				'textures/white.jpg', 'textures/white.jpg',
+				'textures/white.jpg', 'textures/white.jpg'
+			]);
+			
+			cubeTextureLoader.setPath( 'textures/cubemap/' );
+			//cubeTextureLoader.setPath( 'textures/env_map_sides/' );
+			//cubeTextureLoader.setPath( 'textures/SwedishRoyalCastle/' );
+			var textureCube = cubeTextureLoader.load( [
+				'posx.png', 'negx.png',
+				'posy.png', 'negy.png',
+				'posz.png', 'negz.png'
+			] );/*
+			var textureCube = cubeTextureLoader.load( [
+				'posx.bmp', 'negx.bmp',
+				'posy.bmp', 'negy.bmp',
+				'posz.bmp', 'negz.bmp'
+			] );*/
+			scene.background = textureCube;
+			textureCube.minFilter = THREE.LinearMipMapLinearFilter;
+			
 			// MATERIALS
 			
 			// lights
-			var lightParameters1 = { red: 1.0, green: 1.0, blue: 1.0, intensity: 2.0, }
-			var lightParameters2 = { red: 1.0, green: 1.0, blue: 1.0, intensity: 2.0, }
+			var lightParameters1 = { red: 1.0, green: 1.0, blue: 1.0, intensity: 0.5, }
+			var lightParameters2 = { red: 1.0, green: 1.0, blue: 1.0, intensity: 0.0, }
 			var lightParameters3 = { red: 0.0, green: 1.0, blue: 0.0, intensity: 0.0, }
 			var lightParameters4 = { red: 0.0, green: 0.0, blue: 1.0, intensity: 0.0, }
 			var lightParameters = new Array(
@@ -180,7 +303,7 @@
 					lightParameters4.green * lightParameters4.intensity,
 					lightParameters4.blue * lightParameters4.intensity),);
 			var lightMesh1 = new THREE.Mesh( new THREE.SphereGeometry( 1, 16, 16), new THREE.MeshBasicMaterial ({color: 0xffff00, wireframe:true}));
-			lightMesh1.position.set( -20,40,0 );
+			lightMesh1.position.set( -0,40,0 );
 			scene.add(lightMesh1);
 			var lightMesh2 = new THREE.Mesh( new THREE.SphereGeometry( 1, 16, 16), new THREE.MeshBasicMaterial ({color: 0xff0000, wireframe:true}));
 			lightMesh2.position.set( 20,0,-40 );
@@ -200,8 +323,8 @@
 			
 			// textures
 			var accentParts_textureParameters = {
-				material: "materials/Plastic04",
-				metallic: false,
+				material: "materials/Metal02",
+				metallic: true,
 				normalScale: 1.0,
 				repeatS: 2.0,
 				repeatT: 2.0,
@@ -223,11 +346,12 @@
 			var accentParts_cdiff = new THREE.Vector3(1., 1., 1.);
 			
 			var bodyParts_textureParameters = {
-				material: "materials/Fabric06",
+				//material: "materials/Fabric06",
+				material: "materials/Plastic04",
 				metallic : false,
 				normalScale: 1.0,
-				repeatS: 1.0,
-				repeatT: 1.0,
+				repeatS: 4.0,
+				repeatT: 4.0,
 			}
 			var bodyParts_normalScale = new THREE.Vector2(bodyParts_textureParameters.normalScale, bodyParts_textureParameters.normalScale);
 			var bodyParts_textureRepeat = new THREE.Vector2(bodyParts_textureParameters.repeatS, bodyParts_textureParameters.repeatT);
@@ -257,7 +381,8 @@
 				clights:				{ type: "v3[]", value: lightParameters },
 				ambientLight:			{ type: "v3", value: new THREE.Vector3(ambientLightParameters.red * ambientLightParameters.intensity,
 										                                       ambientLightParameters.green * ambientLightParameters.intensity,
-																			   ambientLightParameters.blue * ambientLightParameters.intensity) }
+																			   ambientLightParameters.blue * ambientLightParameters.intensity) },
+				envMap:					{ type: "t", value: textureCube}
 			};
 			var accentParts_uniforms = {
 				specularMap:			{ type: "t", value: accentParts_specularMap},
@@ -272,16 +397,22 @@
 				clights:				{ type: "v3[]", value: lightParameters },
 				ambientLight:			{ type: "v3", value: new THREE.Vector3(ambientLightParameters.red * ambientLightParameters.intensity,
 										                                       ambientLightParameters.green * ambientLightParameters.intensity,
-																			   ambientLightParameters.blue * ambientLightParameters.intensity) }
+																			   ambientLightParameters.blue * ambientLightParameters.intensity) },
+				envMap:					{ type: "t", value: textureCube}
+			};
+			
+			materialExtensions = {
+				derivatives: true, // set to use derivatives
+				shaderTextureLOD: true // set to use shader texture LOD
 			};
 			
 			bodyParts_vs = document.getElementById("material_vertex").textContent;
 			bodyParts_fs = document.getElementById("material_fragment").textContent;
-			bodyParts_material = new THREE.ShaderMaterial({ uniforms: bodyParts_uniforms, vertexShader: bodyParts_vs, fragmentShader: bodyParts_fs });
+			bodyParts_material = new THREE.ShaderMaterial({ uniforms: bodyParts_uniforms, vertexShader: bodyParts_vs, fragmentShader: bodyParts_fs, extensions: materialExtensions });
 			
 			accentParts_vs = document.getElementById("material_vertex").textContent;
 			accentParts_fs = document.getElementById("material_fragment").textContent;
-			accentParts_material = new THREE.ShaderMaterial({ uniforms: accentParts_uniforms, vertexShader:accentParts_vs, fragmentShader: accentParts_fs });
+			accentParts_material = new THREE.ShaderMaterial({ uniforms: accentParts_uniforms, vertexShader:accentParts_vs, fragmentShader: accentParts_fs, extensions: materialExtensions });
 			
 			function loadTexture(file) {
 				var texture = new THREE.TextureLoader().load( file , function ( texture ) {
@@ -338,18 +469,11 @@
 			
 				
 
-				var cubeTextureLoader = new THREE.CubeTextureLoader();
-				var cubemap = cubeTextureLoader.load([
-					'textures/11635.jpg', 'textures/11635.jpg',
-					'textures/top.jpg', 'textures/bot.jpg',
-					'textures/11635.jpg', 'textures/11635.jpg'
-				]);
-				var white_cubemap = cubeTextureLoader.load([
-					'textures/white.jpg', 'textures/white.jpg',
-					'textures/white.jpg', 'textures/white.jpg',
-					'textures/white.jpg', 'textures/white.jpg'
-				]);
-				
+				var sphere = new THREE.Mesh(
+					new THREE.SphereGeometry( 20, 32, 32),
+					bodyParts_material);
+				sphere.position.set( -0,0,0 );
+				//scene.add(sphere); 
 				
 				
 				
