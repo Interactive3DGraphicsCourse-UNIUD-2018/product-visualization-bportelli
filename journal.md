@@ -13,4 +13,13 @@
 17/07/2018
 - Modificato shader aggiungendo riflessioni per metalli
 
-18/07/2018
+20/07/2018
+- Modificato shader aggiungendo metalness e deciso equazione per i materiali
+
+cdiff = ( [1,1,1]-metalness ) * baseColor
+cspec = metalness * baseColor + ( [1,1,1]-metalness ) * 0.04
+
+cdiff è [0,0,0] per i metalli, il colore di base per i materiali dielettrici
+cspec è circa [0.04,0.04,0.04] per i materiali dielettrici, il colore di base per i metalli
+
+outRadiance = BRDF + luce ambientale per i materiali dielettrici + riflesso speculare per i metalli
