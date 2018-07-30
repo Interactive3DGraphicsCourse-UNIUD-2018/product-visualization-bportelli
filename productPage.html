@@ -64,10 +64,6 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
 <!-- Overlay effect when opening sidebar on small screens -->
 <div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
 
-
-
-
-
 <!-- Main content: shift it to the right by 250 pixels when the sidebar is visible -->
 <div class="w3-main" style="margin-left:250px">
 
@@ -83,48 +79,54 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
 	
     <div class="w3-display-container mySlides">
 
-    <canvas id="product_canvas" style="margin-bottom:-6px"> </canvas>
-      <div class="w3-display-bottomleft w3-container w3-black">
-        <p>Living Room</p>
+		<canvas id="product_canvas" style="margin-bottom:-6px"> </canvas>
+		<div class="w3-display-bottomleft w3-container w3-black">
+			<p id="view_description">3D View</p>
+		</div>
+		
+		
+	  
+	  <!--
+	  <div class="w3-display-topright w3-container w3-black" style="text-align:center; font-family:monospace">
+        <p id="zoomIn_btn" onclick="zoomIn()" style="cursor:pointer">+</p>
+		<p id="cameraReset_btn" onclick="cameraReset()" style="cursor:pointer">o</p>
+		<p id="zoomOut_btn" onclick="zoomOut()" style="cursor:pointer">-</p>
       </div>
-    </div>
+	  -->
 
-    <div class="w3-display-container mySlides">
-    <img src="/textures/bot.jpg" style="width:100%;margin-bottom:-6px">
-      <div class="w3-display-bottomleft w3-container w3-black">
-        <p>Dining Room</p>
-      </div>
-    </div>
 
-    <div class="w3-display-container mySlides">
-    <img src="/textures/bot.jpg" style="width:100%;margin-bottom:-6px">
-      <div class="w3-display-bottomleft w3-container w3-black">
-        <p>Bedroom</p>
-      </div>
     </div>
-
-    <div class="w3-display-container mySlides">
-    <img src="/textures/bot.jpg" style="width:100%;margin-bottom:-6px">
-      <div class="w3-display-bottomleft w3-container w3-black">
-        <p>Living Room II</p>
-      </div>
-    </div>
+	
+	<div class="mySlider">
+		<div class=" w3-black slidecontainer">
+				<input type="range" min="0" max="50" value="0" class="slider" oninput="zoom(1, this.value)">
+		</div>
+		<div class=" w3-black slidecontainer">
+				<input type="range" min="1" max="10" value="1" class="slider" oninput="zoom(2, this.value)" >
+		</div>
+		<div class=" w3-black slidecontainer">
+				<input type="range" min="1" max="10" value="1" class="slider" oninput="zoom(3, this.value)">
+		</div>
+		<div class=" w3-black slidecontainer">
+				<input type="range" min="1" max="10" value="1" class="slider" oninput="zoom(4, this.value)">
+		</div>
+	</div>
 	
   </div>
   
   <!-- Slideshow previews -->
   <div class="w3-row-padding w3-section" id="previews">
     <div class="w3-col s3">
-      <img class="demo w3-opacity w3-hover-opacity-off" src="/textures/bot.jpg" style="width:100%;cursor:pointer" onclick="currentDiv(1)" title="Living room">
+      <img class="demo w3-opacity w3-hover-opacity-off" src="/textures/bot.jpg" style="width:100%;cursor:pointer" onclick="change_camera(1)" title="3D View">
     </div>
     <div class="w3-col s3">
-      <img class="demo w3-opacity w3-hover-opacity-off" src="/textures/bot.jpg" style="width:100%;cursor:pointer" onclick="currentDiv(2)" title="Dining room">
+      <img class="demo w3-opacity w3-hover-opacity-off" src="/textures/bot.jpg" style="width:100%;cursor:pointer" onclick="change_camera(2)" title="Point">
     </div>
-    <div class="w3-col s3">
-      <img class="demo w3-opacity w3-hover-opacity-off" src="/textures/bot.jpg" style="width:100%;cursor:pointer" onclick="currentDiv(3)" title="Bedroom">
+	<div class="w3-col s3">
+      <img class="demo w3-opacity w3-hover-opacity-off" src="/textures/bot.jpg" style="width:100%;cursor:pointer" onclick="change_camera(3)" title="Body">
     </div>
-    <div class="w3-col s3">
-      <img class="demo w3-opacity w3-hover-opacity-off" src="/textures/bot.jpg" style="width:100%;cursor:pointer" onclick="currentDiv(4)" title="Second Living Room">
+	<div class="w3-col s3">
+      <img class="demo w3-opacity w3-hover-opacity-off" src="/textures/bot.jpg" style="width:100%;cursor:pointer" onclick="change_camera(4)" title="Clip">
     </div>
   </div>
 
@@ -183,31 +185,54 @@ function currentDiv(n) {
   showDivs(slideIndex = n);
 }
 
+function change_camera(n) {
+	var par = document.getElementById("view_description");
+	switch(n) {
+		case 1: camera = camera1; par.innerHTML="3D View"; break;
+		case 2: camera = camera2; par.innerHTML="Point"; break;
+		case 3: camera = camera3; par.innerHTML="Body"; break;
+		case 4: camera = camera4; par.innerHTML="Clip"; break;
+		default: camera = camera1;
+	}
+	showDivs(n);
+}
+
+function zoom(n, dist) {
+	switch(n) {
+		case 1: camera1.position.setLength(camera.startDist-dist); camera1.updateProjectionMatrix(); break;
+		case 2: camera2.zoom = dist; camera2.updateProjectionMatrix(); break;
+		case 3: camera3.zoom = dist; camera3.updateProjectionMatrix(); break;
+		case 4: camera4.zoom = dist; camera4.updateProjectionMatrix(); break;
+		default:
+	}
+}
+
 function showDivs(n) {
 
   var mainContainter = document.getElementById("apartment");
 
   var i;
-  var x = document.getElementsByClassName("mySlides");
+  var x = document.getElementsByClassName("slidecontainer");
   var dots = document.getElementsByClassName("demo");
   if (n > x.length) {slideIndex = 1}
   if (n < 1) {slideIndex = x.length}
   for (i = 0; i < x.length; i++) {
      x[i].style.display = "none";
   }
-  for (i = 0; i < dots.length; i++) {
-     dots[i].className = dots[i].className.replace(" w3-opacity-off", "");
-  }
-  x[slideIndex-1].style.display = "block";
-  
-  //if (slideIndex==1) {
- //   var c = document.getElementById("product_canvas");
-//	console.log(c.style);
-//  }
 
-  dots[slideIndex-1].className += " w3-opacity-off";
+  x[n-1].style.display = "block";
 }
 
+function cameraReset() {
+	camera1.position.z = 70;
+	camera1.position.y = 70;
+	camera1.position.x = 0;
+	//camera1.rotation.x = 0;
+	//camera1.rotation.y = 0;
+	//camera1.rotation.z = 0;
+	camera.zoom = 1;
+	camera.updateProjectionMatrix();
+}
 
 
 </script>

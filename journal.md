@@ -32,3 +32,14 @@ outRadiance = BRDF + luce ambientale per i materiali dielettrici + riflesso spec
 - Creato template base della pagina con [w3css](https://www.w3schools.com/w3css/default.asp)
 - Problemi nel tentativo di ridimensionare dinamicamente il canvas
 - Risolto aggiungendo qualche riga nel metodo OnResize(), chiamando Element.getBoundingClientRect() su un altro div della pagina per determinare la larghezza che dovrebbe avere il canvas in relazione al resto degli elementi
+
+29/07/2018
+- Aggiunto un sistema di 4 telecamere per poter visualizzare dettagli del prodotto nel sito
+  - camera1 controllara dall'utente
+  - camera2 punta della penna
+  - camera3 corpo
+  - camera4 clip e retro
+- Tolto zoom controllato da rotella (per non interferire con lo scroll della pagina), aggiunti pulsanti per regolare lo zoom (camera.zoom)
+
+30/07/2018
+- Modificato meccanismo di zoom (slider). Mantenere lo zoom anche nelle visualizzazioni statiche (camera2-camera4)?

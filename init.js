@@ -1,4 +1,5 @@
 var scene, renderer, camera, stats, controls;
+var camera1, camera2, camera3, camera4, controls2;
 var canvas, container;
 var bodyParts = new Array();
 var accentParts = new Array();
@@ -13,10 +14,11 @@ function Init() {
 	
 container = document.getElementById("apartment");
 canvas = document.getElementById("product_canvas");
+canvas2 = document.getElementById("point_canvas");
 
 
 scene = new THREE.Scene();
-camera = new THREE.PerspectiveCamera( 30, canvas.width / canvas.height, 0.1, 1000 );
+camera1 = new THREE.PerspectiveCamera( 30, canvas.width / canvas.height, 0.1, 1000 );
 renderer = new THREE.WebGLRenderer({canvas:canvas, antialias:true});
 
 // RENDERER
@@ -24,6 +26,13 @@ renderer.setSize(canvas.width, canvas.height );
 renderer.setClearColor( 0xf0f0f0 );
 renderer.setPixelRatio( canvas.devicePixelRatio );
 //document.body.appendChild( renderer.domElement );
+
+camera2 = new THREE.PerspectiveCamera( 30, canvas.width / canvas.height, 0.1, 1000 );
+camera3 = new THREE.PerspectiveCamera( 30, canvas.width / canvas.height, 0.1, 1000 );
+camera4 = new THREE.PerspectiveCamera( 30, canvas.width / canvas.height, 0.1, 1000 );
+
+
+camera = camera1;
 
 /*****************************************************************************
  *  loads shaders from external files, sets loades_shader to true once done

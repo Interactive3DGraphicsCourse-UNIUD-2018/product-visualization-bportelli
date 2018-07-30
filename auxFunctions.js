@@ -1,11 +1,35 @@
 function Start() {
 		
 	// CAMERA SETTINGS
-	camera.position.z = 70;
-	camera.position.y = 70;
-	camera.position.x = 0;
+	camera1.position.z = 70;
+	camera1.position.y = 70;
+	camera1.position.x = 0;
+	camera1.startDist = camera1.position.length();
 	
+	camera2.position.z = 40;
+	camera2.position.y = 10;
+	camera2.position.x = -10;
+	camera2.lookAt(0,0,22);
+	camera2.startDist = camera2.position.length();
 	
+	camera3.position.z = -10;
+	camera3.position.y = 20;
+	camera3.position.x = 10;
+	camera3.lookAt(0,0,-5);
+	camera3.startDist = camera3.position.length();
+	
+	camera4.position.y = 0;
+	camera4.position.x = 20;
+	
+	camera4.position.z = -50;
+	camera4.position.y = -10;
+	camera4.position.x = 20;
+	//camera4.up = new THREE.Vector3(0,0,-1);
+	camera4.lookAt(0,0,-25);
+	camera4.startDist = camera4.position.length();
+
+	
+	//camera2.rotation.y = -90*Math.PI/180;
 
 	// STATS
 	stats = new Stats();
@@ -16,6 +40,11 @@ function Start() {
 	// CAMERA CONTROLS
 	controls = new THREE.OrbitControls( camera, renderer.domElement );
 	controls.addEventListener( 'change', Render );
+	controls.enableZoom = false;
+	
+	//controls2 = new THREE.OrbitControls( camera2, renderer2.domElement );
+	//controls2.addEventListener( 'change', Render );
+	//controls2.enableZoom = false;
 	
 	window.addEventListener( 'resize', OnResize, false );
 	
@@ -27,6 +56,7 @@ function FirstUpdate() {
 
 	stats.update();
 	controls.update();
+	//controls2.update();
 
 	if (done && loaded_shaders) {
 
@@ -79,6 +109,7 @@ function Update() {
 	requestAnimationFrame(Update);
 	stats.update();
 	controls.update();
+	//controls2.update();
 	Render();
 }
 
@@ -93,8 +124,14 @@ function OnResize() {
 		canvas.width = Math.min(rect.width, 1200-250)-32;
 		canvas.height = (Math.min(rect.width, 1200-250)-32)/3*2;
 		renderer.setSize( canvas.width,canvas.height );
-		camera.aspect = ( canvas.width / canvas.height );
-		camera.updateProjectionMatrix();
+		camera1.aspect = ( canvas.width / canvas.height );
+		camera1.updateProjectionMatrix();
+		camera2.aspect = ( canvas.width / canvas.height );
+		camera2.updateProjectionMatrix();
+		camera3.aspect = ( canvas.width / canvas.height );
+		camera3.updateProjectionMatrix();
+		camera4.aspect = ( canvas.width / canvas.height );
+		camera4.updateProjectionMatrix();
 	}, 500);
 	
 }
