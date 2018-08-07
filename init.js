@@ -12,7 +12,7 @@ var loaded_shaders = false;
 
 function Init() {
 	
-container = document.getElementById("apartment");
+container = document.getElementById("main_div");
 canvas = document.getElementById("product_canvas");
 canvas2 = document.getElementById("point_canvas");
 
@@ -53,11 +53,8 @@ var cubeTextureLoader = new THREE.CubeTextureLoader();
 cubeTextureLoader.setPath( 'textures/' );
 var textureCube;
 
-//textureCube = cubeTextureLoader.load(['cubemap/posx.png', 'cubemap/negx.png', 'cubemap/posy.png', 'cubemap/negy.png', 'cubemap/posz.png', 'cubemap/negz.png']);
-//textureCube = cubeTextureLoader.load(['musee/cube-map_right.jpg', 'musee/cube-map_left.jpg', 'musee/cube-map_top.jpg', 'musee/cube-map_bottom.jpg', 'musee/cube-map_front.jpg', 'musee/cube-map_back.jpg']);
-//textureCube = cubeTextureLoader.load(['MarriottMadisonWest/posx.jpg', 'MarriottMadisonWest/negx.jpg', 'MarriottMadisonWest/posy.jpg', 'MarriottMadisonWest/negy.jpg', 'MarriottMadisonWest/posz.jpg', 'MarriottMadisonWest/negz.jpg']);
-//textureCube = cubeTextureLoader.load(['DallasW/posx.jpg', 'DallasW/negx.jpg', 'DallasW/posy.jpg', 'DallasW/negy.jpg', 'DallasW/posz.jpg', 'DallasW/negz.jpg']);
-textureCube = cubeTextureLoader.load(['env_map_sides/posx.bmp', 'env_map_sides/negx.bmp', 'env_map_sides/posy.bmp', 'env_map_sides/negy.bmp', 'env_map_sides/posz.bmp', 'env_map_sides/negz.bmp']);
+textureCube = cubeTextureLoader.load(['musee/cube-map_right.jpg', 'musee/cube-map_left.jpg', 'musee/cube-map_top.jpg', 'musee/cube-map_bottom.jpg', 'musee/cube-map_front.jpg', 'musee/cube-map_back.jpg']);
+//textureCube = cubeTextureLoader.load(['env_map_sides/posx.bmp', 'env_map_sides/negx.bmp', 'env_map_sides/posy.bmp', 'env_map_sides/negy.bmp', 'env_map_sides/posz.bmp', 'env_map_sides/negz.bmp']);
 
 //scene.background = textureCube;
 textureCube.minFilter = THREE.LinearMipMapLinearFilter;
@@ -66,28 +63,28 @@ textureCube.minFilter = THREE.LinearMipMapLinearFilter;
 /*********************
  *  light parameters
  */
-var lightParams1 = { red: 1.0, green: 1.0, blue: 1.0,    intensity: 0.2,    pos: [0, 40, 0] };
-var lightParams2 = { red: 1.0, green: 1.0, blue: 1.0,    intensity: 0.0,    pos: [0, 40, -30] };
-var lightParams3 = { red: 0.0, green: 1.0, blue: 0.0,    intensity: 0.0,    pos: [-20, 40, 0] };
+var lightParams1 = { red: 1.0, green: 1.0, blue: 1.0,    intensity: 0.5,    pos: [0, 40, 0] };
+var lightParams2 = { red: .2, green: .2, blue: .2,    intensity: 0.4,    pos: [20, -30, 0] };
+var lightParams3 = { red: .2, green: .2, blue: .2,    intensity: 0.4,    pos: [-20, -30, 0] };
 var lightParams4 = { red: 0.0, green: 0.0, blue: 1.0,    intensity: 0.0,    pos: [20, 0, -40] };
-var ambientLightParams = { red: 0.2, green: 0.2, blue: 0.2, intensity: 0.0, }
+var ambientLightParams = { red: 0.1, green: 0.05, blue: 0.05, intensity: 0.1, }
 
 if (lightParams1.intensity > 0) {
 	var lightMesh1 = new THREE.Mesh( new THREE.SphereGeometry( 1, 16, 16), new THREE.MeshBasicMaterial ({color: 0xffff00, wireframe:true}));
 	lightMesh1.position.set( lightParams1.pos[0], lightParams1.pos[1], lightParams1.pos[2] );
-	scene.add(lightMesh1);
+	//scene.add(lightMesh1);
 	var lightPos1 = new THREE.Vector3(lightMesh1.position.x, lightMesh1.position.y, lightMesh1.position.z);
 } else { var lightPos1 = new THREE.Vector3(0,0,0); }
 if (lightParams2.intensity > 0) {
 	var lightMesh2 = new THREE.Mesh( new THREE.SphereGeometry( 1, 16, 16), new THREE.MeshBasicMaterial ({color: 0xffff00, wireframe:true}));
 	lightMesh2.position.set( lightParams2.pos[0], lightParams2.pos[1], lightParams2.pos[2] );
-	scene.add(lightMesh2);
+	//scene.add(lightMesh2);
 	var lightPos2 = new THREE.Vector3(lightMesh2.position.x, lightMesh2.position.y, lightMesh2.position.z);
 } else { var lightPos2 = new THREE.Vector3(0,0,0); }
 if (lightParams3.intensity > 0) {
 	var lightMesh3 = new THREE.Mesh( new THREE.SphereGeometry( 1, 16, 16), new THREE.MeshBasicMaterial ({color: 0xffff00, wireframe:true}));
 	lightMesh3.position.set( lightParams3.pos[0], lightParams3.pos[1], lightParams3.pos[2] );
-	scene.add(lightMesh3);
+	//scene.add(lightMesh3);
 	var lightPos3 = new THREE.Vector3(lightMesh3.position.x, lightMesh3.position.y, lightMesh3.position.z);
 } else { var lightPos3 = new THREE.Vector3(0,0,0); }
 if (lightParams4.intensity > 0) {
@@ -142,7 +139,7 @@ var uniforms_shared = {
  *  material-specific uniforms (textures and color)
  */
 
-var uniforms_plastic = {
+uniforms_plastic = {
 	metalnessMap:	{ type: "t", value: loadTexture("textures/materials/plastic_met.jpg") },
 	diffuseMap:		{ type: "t", value: loadTexture("textures/materials/Plastic04_col.jpg") },
 	roughnessMap:	{ type: "t", value: loadTexture("textures/materials/Plastic04_rgh.jpg") },
@@ -152,37 +149,37 @@ var uniforms_plastic = {
 	textureRepeat:	{ type: "v2", value: new THREE.Vector2(4.0, 4.0) }
 };
 
-var uniforms_wood = {
+uniforms_wood = {
 	metalnessMap:	{ type: "t", value: loadTexture("textures/materials/plastic_met.jpg") },
-	diffuseMap:		{ type: "t", value: loadTexture("textures/materials/Wood05_col.jpg") },
-	roughnessMap:	{ type: "t", value: loadTexture("textures/materials/Wood05_rgh.jpg") },
-	normalMap:		{ type: "t", value: loadTexture("textures/materials/Wood05_nrm.jpg") },
-	aoMap:			{ type: "t", value: loadTexture("textures/materials/Wood05_disp.jpg") },
+	diffuseMap:		{ type: "t", value: loadTexture("textures/materials/Wood08_col.jpg") },
+	roughnessMap:	{ type: "t", value: loadTexture("textures/materials/Wood08_rgh.jpg") },
+	normalMap:		{ type: "t", value: loadTexture("textures/materials/Wood08_nrm.jpg") },
+	aoMap:			{ type: "t", value: loadTexture("textures/materials/Wood08_disp.jpg") },
 	normalScale:	{ type: "v2", value: new THREE.Vector2(1.0, 1.0) },
 	textureRepeat:	{ type: "v2", value: new THREE.Vector2(2.0, 2.0) }
 };
 
-var uniforms_fabric = {
+uniforms_fabric = {
 	metalnessMap:	{ type: "t", value: loadTexture("textures/materials/plastic_met.jpg") },
 	diffuseMap:		{ type: "t", value: loadTexture("textures/materials/Fabric04_col.jpg") },
 	roughnessMap:	{ type: "t", value: loadTexture("textures/materials/Fabric04_rgh.jpg") },
 	normalMap:		{ type: "t", value: loadTexture("textures/materials/Fabric04_nrm.jpg") },
 	aoMap:			{ type: "t", value: loadTexture("textures/materials/Fabric04_disp.jpg") },
 	normalScale:	{ type: "v2", value: new THREE.Vector2(1.0, 1.0) },
-	textureRepeat:	{ type: "v2", value: new THREE.Vector2(2.0, 2.0) }
+	textureRepeat:	{ type: "v2", value: new THREE.Vector2(3.0, 3.0) }
 };
 
-var uniforms_metal = {
-	metalnessMap:	{ type: "t", value: loadTexture("textures/materials/Metal02_met.jpg") },
-	diffuseMap:		{ type: "t", value: loadTexture("textures/materials/Metal02_col.jpg") },
-	roughnessMap:	{ type: "t", value: loadTexture("textures/materials/Metal02_rgh.jpg") },
-	normalMap:		{ type: "t", value: loadTexture("textures/materials/Metal02_nrm.jpg") },
-	aoMap:			{ type: "t", value: loadTexture("textures/materials/Metal02_disp.jpg") },
-	normalScale:	{ type: "v2", value: new THREE.Vector2(1.0, 1.0) },
-	textureRepeat:	{ type: "v2", value: new THREE.Vector2(2.0, 2.0) }
+uniforms_metal = {
+	metalnessMap:	{ type: "t", value: loadTexture("textures/materials/Metal_met.jpg") },
+	diffuseMap:		{ type: "t", value: loadTexture("textures/materials/Plastic04_col.jpg") },
+	roughnessMap:	{ type: "t", value: loadTexture("textures/materials/Plastic04_rgh.jpg") },
+	normalMap:		{ type: "t", value: loadTexture("textures/materials/Plastic04_nrm.jpg") },
+	aoMap:			{ type: "t", value: loadTexture("textures/materials/Plastic04_disp.jpg") },
+	normalScale:	{ type: "v2", value: new THREE.Vector2(1., 1.) },
+	textureRepeat:	{ type: "v2", value: new THREE.Vector2(3.0, 3.0) }
 };
 
-var uniforms_smoothMetal = {
+uniforms_smoothMetal = {
 	metalnessMap:	{ type: "t", value: loadTexture("textures/materials/Metal_met.jpg") },
 	diffuseMap:		{ type: "t", value: loadTexture("textures/materials/Metal_col.jpg") },
 	roughnessMap:	{ type: "t", value: loadTexture("textures/materials/Metal_rgh.jpg") },

@@ -49,15 +49,75 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
 <!-- Sidebar/menu -->
 <nav class="w3-sidebar w3-light-grey w3-collapse" id="mySidebar">
   <div class="w3-container w3-display-container w3-padding-16">
-    <i onclick="w3_close()" class="fa fa-remove w3-hide-large w3-button w3-transparent w3-display-topright"></i>
-    <h3>Add options in a form</h3>
-    <hr>
-    <form action="/action_page.php" target="_blank">
-      <p><button class="w3-button w3-block w3-green w3-left-align" type="submit"><i class="fa fa-search w3-margin-right"></i> Search availability</button></p>
-    </form>
-  </div>
-  <div class="w3-bar-block">
-	<p class="w3-bar-item w3-padding-16">Other stuff</p>
+    <i onclick="w3_close()" class="fa fa-remove w3-hide-large w3-button w3-transparent w3-display-topright"></i>	
+	<div class="w3-border-top w3-border-bottom w3-border-left w3-border-right w3-padding w3-border-grey w3-margin-bottom">
+		<h5><strong>Body</strong></h5>
+		<p><strong>Material</strong></p>
+		<select id="bodyMat" class="w3-select" onchange="changeMaterial(0)">
+		  <option selected="selected" value="plastic">Plastic</option>
+		  <option value="metal">Metal</option>
+		  <option value="woven">Woven</option>
+		  <option value="wood">Wood</option>
+		</select>
+			<p><strong>Color</strong></p>
+			<div align=center>
+			<button type="button" onclick="changeCol(0,'red')" class="color-button w3-red"/>
+			<button type="button" onclick="changeCol(0,'green')" class="color-button w3-green"/>
+			<button type="button" onclick="changeCol(0,'dark-blue')" class="color-button w3-dark-blue"/>
+			</div>
+			<div align=center>
+			<button type="button" onclick="changeCol(0,'orange')" class="color-button w3-orange"/>
+			<button type="button" onclick="changeCol(0,'black')" class="color-button w3-black"/>
+			<button type="button" onclick="changeCol(0,'cyan')" class="color-button w3-cyan"/>
+			<button type="button" onclick="changeCol(0,'white')" class="color-button w3-white" style="border:1px solid #bbb"/>
+			</div>
+			<div align=center>
+			<button type="button" onclick="changeCol(0,'purple')" class="color-button w3-purple"/>
+			<button type="button" onclick="changeCol(0,'yellow')" class="color-button w3-yellow"/>
+			<button type="button" onclick="changeCol(0,'pink')" class="color-button w3-pink"/>
+			</div>
+	</div>
+	
+	<div class="w3-border-top w3-border-bottom w3-border-left w3-border-right w3-padding w3-border-grey w3-margin-bottom">
+		<h5><strong>Point and clip</strong></h5>
+		<p><strong>Material</strong></p>
+		<select id="accentMat" class="w3-select" onchange="changeMaterial(1)">
+		  <option value="plastic">Plastic</option>
+		  <option value="metal" selected="selected">Metal</option>
+		</select>
+		
+		<div id="accentOptions">
+			<p><strong>Color</strong></p>
+			<div align=center>
+			<button type="button" onclick="changeCol(1,'red')" class="color-button w3-red"/>
+			<button type="button" onclick="changeCol(1,'green')" class="color-button w3-green"/>
+			<button type="button" onclick="changeCol(1,'dark-blue')" class="color-button w3-dark-blue"/>
+			</div>
+			<div align=center>
+			<button type="button" onclick="changeCol(1,'orange')" class="color-button w3-orange"/>
+			<button type="button" onclick="changeCol(1,'black')" class="color-button w3-black"/>
+			<button type="button" onclick="changeCol(1,'cyan')" class="color-button w3-cyan"/>
+			<button type="button" onclick="changeCol(1,'white')" class="color-button w3-white" style="border:1px solid #bbb"/>
+			</div>
+			<div align=center>
+			<button type="button" onclick="changeCol(1,'purple')" class="color-button w3-purple"/>
+			<button type="button" onclick="changeCol(1,'yellow')" class="color-button w3-yellow"/>
+			<button type="button" onclick="changeCol(1,'pink')" class="color-button w3-pink"/>
+			</div>
+		</div>
+	</div>
+	
+	<div class="w3-border-top w3-border-bottom w3-border-left w3-border-right w3-padding w3-border-grey w3-margin-bottom">
+		<h5><strong>Ink Color</strong></h5>
+		<div id="accentOptions">
+			<div align=center>
+			<button type="button" onclick="changeCol(2,'black')" class="color-button w3-black"/>
+			<button type="button" onclick="changeCol(2,'blue')" class="color-button w3-dark-blue"/>
+			<button type="button" onclick="changeCol(2,'red')" class="color-button w3-red"/>
+			<button type="button" onclick="changeCol(2,'green')" class="color-button w3-green"/>
+			</div>
+		</div>
+	</div>
   </div>
 </nav>
 
@@ -73,9 +133,9 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
   <div style="margin-top:50px"></div>
 
   <!-- Slideshow Header -->
-  <div class="w3-container" id="apartment">
+  <div class="w3-container" id="main_div">
   
-    <h2 class="w3-text-green">Create your pen!</h2>
+    <h2 class="w3-text-black w3-xxlarge">Customizable ballpoint pen</h2>
 	
     <div class="w3-display-container mySlides">
 
@@ -115,18 +175,25 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
   </div>
   
   <!-- Slideshow previews -->
-  <div class="w3-row-padding w3-section" id="previews">
-    <div class="w3-col s3">
-      <img class="demo w3-opacity w3-hover-opacity-off" src="/textures/bot.jpg" style="width:100%;cursor:pointer" onclick="change_camera(1)" title="3D View">
+  <div class="w3-row-padding w3-section" align=center id="previews">
+	
+    <div class="w3-col s3" style="width:20%">
+      <img class="demo w3-opacity w3-hover-opacity-off" src="/images/3D.jpg" style="width:100%;cursor:pointer" onclick="change_camera(1)" title="3D View">
     </div>
-    <div class="w3-col s3">
-      <img class="demo w3-opacity w3-hover-opacity-off" src="/textures/bot.jpg" style="width:100%;cursor:pointer" onclick="change_camera(2)" title="Point">
+    <div class="w3-col s3" style="width:20%">
+      <img class="w3-border-top w3-border-bottom w3-border-left w3-border-right
+	              w3-border-green demo w3-opacity w3-hover-opacity-off"
+				  src="/images/point.jpg" style="width:100%;cursor:pointer" onclick="change_camera(2)" title="Point">
     </div>
-	<div class="w3-col s3">
-      <img class="demo w3-opacity w3-hover-opacity-off" src="/textures/bot.jpg" style="width:100%;cursor:pointer" onclick="change_camera(3)" title="Body">
+	<div class="w3-col s3" style="width:20%">
+      <img class="w3-border-top w3-border-bottom w3-border-left w3-border-right
+	              w3-border-green demo w3-opacity w3-hover-opacity-off"
+				  src="/images/body.jpg" style="width:100%;cursor:pointer" onclick="change_camera(3)" title="Body">
     </div>
-	<div class="w3-col s3">
-      <img class="demo w3-opacity w3-hover-opacity-off" src="/textures/bot.jpg" style="width:100%;cursor:pointer" onclick="change_camera(4)" title="Clip">
+	<div class="w3-col s3" style="width:20%">
+      <img class="w3-border-top w3-border-bottom w3-border-left w3-border-right
+	              w3-border-green demo w3-opacity w3-hover-opacity-off"
+				  src="/images/clip.jpg" style="width:100%;cursor:pointer" onclick="change_camera(4)" title="Clip">
     </div>
   </div>
 
@@ -188,10 +255,10 @@ function currentDiv(n) {
 function change_camera(n) {
 	var par = document.getElementById("view_description");
 	switch(n) {
-		case 1: camera = camera1; par.innerHTML="3D View"; break;
-		case 2: camera = camera2; par.innerHTML="Point"; break;
-		case 3: camera = camera3; par.innerHTML="Body"; break;
-		case 4: camera = camera4; par.innerHTML="Clip"; break;
+		case 1: camera = camera1; par.innerHTML="3D View"; controls.enabled=true; break;
+		case 2: camera = camera2; par.innerHTML="Point"; controls.enabled=false; break;
+		case 3: camera = camera3; par.innerHTML="Body"; controls.enabled=false; break;
+		case 4: camera = camera4; par.innerHTML="Clip"; controls.enabled=false; break;
 		default: camera = camera1;
 	}
 	showDivs(n);
@@ -208,9 +275,6 @@ function zoom(n, dist) {
 }
 
 function showDivs(n) {
-
-  var mainContainter = document.getElementById("apartment");
-
   var i;
   var x = document.getElementsByClassName("slidecontainer");
   var dots = document.getElementsByClassName("demo");
@@ -219,7 +283,6 @@ function showDivs(n) {
   for (i = 0; i < x.length; i++) {
      x[i].style.display = "none";
   }
-
   x[n-1].style.display = "block";
 }
 
@@ -234,6 +297,47 @@ function cameraReset() {
 	camera.updateProjectionMatrix();
 }
 
+var colors = Array();
+colors['red'] =	new THREE.Vector3(1., 0., 0.);
+colors['green'] = new THREE.Vector3(0., 1., 0.);
+colors['dark-blue'] = new THREE.Vector3(0., 0., .5);
+colors['blue'] = new THREE.Vector3(0., 0., 1.);
+colors['orange'] = new THREE.Vector3(1., .5, 0.);
+colors['black'] = new THREE.Vector3(0., 0., 0.);
+colors['cyan'] = new THREE.Vector3(.0, 1., 1.);
+colors['white'] = new THREE.Vector3(1., 1., 1.);
+colors['purple'] = new THREE.Vector3(.6, 0., .8);
+colors['yellow'] = new THREE.Vector3(1., 1., 0.);
+colors['pink'] = new THREE.Vector3(1., 0., .5);
+
+function changeCol(n, colName) {
+	switch(n){
+		case 0: bodyParts_uniforms.surfCdiff.value = colors[colName]; break;
+		case 1: accentParts_uniforms.surfCdiff.value = colors[colName]; break;
+		case 2: ballpoint_uniforms.surfCdiff.value = colors[colName]; break;
+	}
+}
+
+function changeMaterial(n){
+	switch(n){
+		case 0:
+			var selector= document.getElementById('bodyMat');
+			var itemvalue= selector.options[selector.selectedIndex].text;
+			if (itemvalue==='Plastic') Object.assign(bodyParts_uniforms, uniforms_plastic);
+			if (itemvalue==='Woven') Object.assign(bodyParts_uniforms, uniforms_fabric);
+			if (itemvalue==='Metal') Object.assign(bodyParts_uniforms, uniforms_smoothMetal);
+			if (itemvalue==='Wood') Object.assign(bodyParts_uniforms, uniforms_wood);
+			break;
+		case 1:
+			var selector= document.getElementById('accentMat');
+			var itemvalue= selector.options[selector.selectedIndex].text;
+			if (itemvalue==='Plastic') Object.assign(accentParts_uniforms, uniforms_plastic);
+			if (itemvalue==='Metal') Object.assign(accentParts_uniforms, uniforms_smoothMetal);
+			if (itemvalue==='Wood') Object.assign(accentParts_uniforms, uniforms_wood);
+			break;
+	}
+}
+	
 
 </script>
 

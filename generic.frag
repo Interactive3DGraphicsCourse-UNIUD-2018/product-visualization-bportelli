@@ -94,7 +94,7 @@ void main() {
 	vec3 metalness = texture2D( metalnessMap, uVv*textureRepeat ).rgb;
 	
 	vec3 baseColor = texture2D( diffuseMap, uVv*textureRepeat ).rgb;
-	baseColor = (baseColor * surfCdiff)*2.;  // to change color
+	baseColor = (baseColor * surfCdiff)*1.;  // to change color
 	baseColor = pow( baseColor, vec3(2.2));	 // texture in sRGB, linearize			
 	
 	// Relation between metalness and (cdiff, cspec)
@@ -136,7 +136,7 @@ void main() {
 		outRadiances[i] = PI* clights[i] * nDotl * BRDF ;
 	}
 	
-	vec3 ambLight = (cdiff*(grayScaleEnvLight2+vec3(0.0))+envLight2*0.04)*texture2D( aoMap, uVv * textureRepeat ).xyz;
+	vec3 ambLight = (cdiff*(grayScaleEnvLight2+vec3(0.0))+envLight2*0.04+ ambientLight)*texture2D( aoMap, uVv * textureRepeat ).xyz;
 
 	vec3 metallicReflection = envLight*BRDF_Specular_GGX_Environment(n, v, cspec, roughness)*texture2D( aoMap, uVv * textureRepeat ).xyz;
 	

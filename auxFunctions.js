@@ -18,6 +18,7 @@ function Start() {
 	camera3.lookAt(0,0,-5);
 	camera3.startDist = camera3.position.length();
 	
+	camera4.position.z = -50;
 	camera4.position.y = 0;
 	camera4.position.x = 20;
 	
@@ -35,16 +36,14 @@ function Start() {
 	stats = new Stats();
 	stats.domElement.style.position = 'relative';
 	stats.domElement.style.top = '0px';
-	container.appendChild( stats.domElement );
+	stats_div = document.getElementById("previews");
+	//stats_div.appendChild( stats.domElement );
 	
 	// CAMERA CONTROLS
 	controls = new THREE.OrbitControls( camera, renderer.domElement );
 	controls.addEventListener( 'change', Render );
 	controls.enableZoom = false;
-	
-	//controls2 = new THREE.OrbitControls( camera2, renderer2.domElement );
-	//controls2.addEventListener( 'change', Render );
-	//controls2.enableZoom = false;
+	controls.enablePan = false;
 	
 	window.addEventListener( 'resize', OnResize, false );
 	
@@ -56,7 +55,6 @@ function FirstUpdate() {
 
 	stats.update();
 	controls.update();
-	//controls2.update();
 
 	if (done && loaded_shaders) {
 
@@ -109,7 +107,6 @@ function Update() {
 	requestAnimationFrame(Update);
 	stats.update();
 	controls.update();
-	//controls2.update();
 	Render();
 }
 
