@@ -73,6 +73,12 @@ La possibilità di fare panning è stata disabilitata all'interno nel visualizza
 
 Dopo aver posizionato la penna al centro della scena ed aver trovato una cube map adatta sono state posizionate 3 luci puntuali (una sopra all'oggetto e due ai lati per risaltarne la silouette). Le intensità delle luci puntuali e della luce ambientale costante sono state tarate in base all'intensità della luce presente nella cube map per ottenere un effetto uniforme.
 
+I possibili materiali tra cui si può scegliere sono:
+- per il corpo della penna: plastica, metallo, materiale metallico con texture intrecciata (Woven) e legno
+- per punta e clip: plastica e metallo
+
+Si può inoltre scegliere tra 10 colori prestabiliti per il corpo e la punta della penna e tra 4 colori per l'inchiostro (modifica il colore della punta della penna).
+
 ## Programmi usati
 
 - **Autodesk Maya 2017** (versione studenti) per la modifica della geometria del modello e la creazione delle uv-map
