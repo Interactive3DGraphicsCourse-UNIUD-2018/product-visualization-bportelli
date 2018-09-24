@@ -96,6 +96,9 @@ function FirstUpdate() {
 		loaded_shaders = false;
 		
 		requestAnimationFrame(Update);
+		
+		changeMaterial(0);
+		changeMaterial(1);
 	
 	} else {
 		requestAnimationFrame(FirstUpdate);

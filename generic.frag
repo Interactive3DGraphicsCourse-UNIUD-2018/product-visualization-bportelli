@@ -15,6 +15,7 @@ uniform vec2 normalScale;
 uniform vec2 textureRepeat;
 uniform vec3 surfCdiff;
 uniform samplerCube envMap;
+
 const float PI = 3.14159;
 vec3 cdiff;
 vec3 cspec;
@@ -95,7 +96,7 @@ void main() {
 	
 	vec3 baseColor = texture2D( diffuseMap, uVv*textureRepeat ).rgb;
 	baseColor = (baseColor * surfCdiff)*1.;  // to change color
-	baseColor = pow( baseColor, vec3(2.2));	 // texture in sRGB, linearize			
+	baseColor = pow( baseColor, vec3(2.2));	 // texture in sRGB, linearize
 	
 	// Relation between metalness and (cdiff, cspec)
 	// | material  | metalness | cdiff     | cspec     |
@@ -110,7 +111,7 @@ void main() {
 	float specularMIPLevel = getSpecularMIPLevel(blinnShininessExponent, 8);
 	vec3 envLight = textureCubeLodEXT( envMap, vec3(-r.x, r.yz), specularMIPLevel ).rgb;
 	vec3 grayScaleEnvLight = vec3(.3*envLight.r + .59*envLight.g + .11*envLight.b);
-	envLight = pow( envLight, vec3(2.2));
+	envLight = pow( envLight, vec3(2.2)); // light in sRGB, linearize
 	grayScaleEnvLight = pow( grayScaleEnvLight, vec3(2.2));
 	
 	float blinnShininessExponent2 = GGXRoughnessToBlinnExponent(1.);
@@ -118,7 +119,7 @@ void main() {
 	vec3 envLight2 = textureCubeLodEXT( envMap, vec3(-r.x, r.yz), specularMIPLevel2 ).rgb;
 	vec3 grayScaleEnvLight2 = vec3(.3*envLight2.r + .59*envLight2.g + .11*envLight2.b);
 	envLight2 = pow( envLight2, vec3(2.2));
-	grayScaleEnvLight2 = pow( grayScaleEnvLight2, vec3(2.2));
+	grayScaleEnvLight2 = pow( grayScaleEnvLight2, vec3(2.2)); // texture in sRGB, linearize
 	
 	for (int i=0; i<4; i++) {
 		vec4 lPosition = viewMatrix * vec4( pointLightPositions[i], 1.0 );
@@ -136,7 +137,7 @@ void main() {
 		outRadiances[i] = PI* clights[i] * nDotl * BRDF ;
 	}
 	
-	vec3 ambLight = (cdiff*(grayScaleEnvLight2+vec3(0.0))+envLight2*0.04+ ambientLight)*texture2D( aoMap, uVv * textureRepeat ).xyz;
+	vec3 ambLight = (cdiff*grayScaleEnvLight2+envLight2*0.04+ambientLight)*texture2D( aoMap, uVv * textureRepeat ).xyz;
 
 	vec3 metallicReflection = envLight*BRDF_Specular_GGX_Environment(n, v, cspec, roughness)*texture2D( aoMap, uVv * textureRepeat ).xyz;
 	

@@ -4,7 +4,7 @@
 <title>W3.CSS Template</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="w3.css">
+<link rel="stylesheet" href="w3_mod.css">
 <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -33,24 +33,37 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
 
 
 <!-- Navbar -->
-<div class="w3-top">
-  <div class="w3-bar w3-theme w3-top w3-left-align w3-large" style="max-width:1200px">
-    <a class="w3-bar-item w3-button w3-left w3-hide-large w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="w3_open()"><i class="fa fa-bars"></i></a>
-    <a href="#" class="w3-bar-item w3-button w3-theme-l1">t1</a>
-    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white">t2</a>
-    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white">t3</a>
-    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white">t4</a>
-    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white">t5</a>
-    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-white">t6</a>
-    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-white">t7</a>
+<div class="w3-top" >
+  <div class="w3-bar w3-theme w3-top w3-left-align w3-large w3-black" style="max-width:1200px">
+    <a href="#" class="w3-bar-item w3-button w3-theme-l1">Choose by Category</a>
+    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Offers</a>
+    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Gift Cards</a>
+    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Help</a>
+    
+    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-white w3-right w3-red"> <i class="fa fa-shopping-cart"></i> Cart	</a>
+	<a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white w3-right">Sign In</a>
+	
   </div>
 </div>
 
-<!-- Sidebar/menu -->
-<nav class="w3-sidebar w3-light-grey w3-collapse" id="mySidebar">
+
+<!-- !PAGE CONTENT! -->
+
+<!-- Push down content -->
+  <div style="margin-top:40px"></div>
+  
+   <img src="images/bannerACME.jpg" style="max-width:1200px" title="banner ACME">
+  
+<div> <!-- Start stuff to push down -->
+  
+
+<div class="w3-sidebar w3-col s3 w3-collapse"  style="width:250px" id="mySidebar">
+
+<nav >
+
   <div class="w3-container w3-display-container w3-padding-16">
-    <i onclick="w3_close()" class="fa fa-remove w3-hide-large w3-button w3-transparent w3-display-topright"></i>	
-	<div class="w3-border-top w3-border-bottom w3-border-left w3-border-right w3-padding w3-border-grey w3-margin-bottom">
+    <i onclick="w3_close()" class="fa fa-remove w3-red w3-hide-large w3-button w3-transparent w3-display-topright"></i>	
+	<div class="w3-border-top w3-border-bottom w3-border-left w3-border-right w3-padding w3-border-grey w3-margin-bottom w3-light-grey">
 		<h5><strong>Body</strong></h5>
 		<p><strong>Material</strong></p>
 		<select id="bodyMat" class="w3-select" onchange="changeMaterial(0)">
@@ -78,7 +91,7 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
 			</div>
 	</div>
 	
-	<div class="w3-border-top w3-border-bottom w3-border-left w3-border-right w3-padding w3-border-grey w3-margin-bottom">
+	<div class="w3-border-top w3-border-bottom w3-border-left w3-border-right w3-padding w3-border-grey w3-margin-bottom w3-light-grey">
 		<h5><strong>Point and clip</strong></h5>
 		<p><strong>Material</strong></p>
 		<select id="accentMat" class="w3-select" onchange="changeMaterial(1)">
@@ -107,7 +120,7 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
 		</div>
 	</div>
 	
-	<div class="w3-border-top w3-border-bottom w3-border-left w3-border-right w3-padding w3-border-grey w3-margin-bottom">
+	<div class="w3-border-top w3-border-bottom w3-border-left w3-border-right w3-padding w3-border-grey w3-margin-bottom w3-light-grey">
 		<h5><strong>Ink Color</strong></h5>
 		<div id="accentOptions">
 			<div align=center>
@@ -121,102 +134,157 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
   </div>
 </nav>
 
+</div>
+
 <!-- Overlay effect when opening sidebar on small screens -->
 <div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
 
-<!-- Main content: shift it to the right by 250 pixels when the sidebar is visible -->
+
 <div class="w3-main" style="margin-left:250px">
 
-  <!-- !PAGE CONTENT! -->
-
-  <!-- Push down content -->
-  <div style="margin-top:50px"></div>
-
-  <!-- Slideshow Header -->
-  <div class="w3-container" id="main_div">
-  
-    <h2 class="w3-text-black w3-xxlarge">Customizable ballpoint pen</h2>
+	<div class="w3-col" align=center style="padding-left:25px;padding-right:25px">
 	
-    <div class="w3-display-container mySlides">
-
-		<canvas id="product_canvas" style="margin-bottom:-6px"> </canvas>
-		<div class="w3-display-bottomleft w3-container w3-black">
-			<p id="view_description">3D View</p>
-		</div>
-		
-		
+	<!-- Slideshow Header -->
+	
+	  <div class="w3-container" id="main_div">
 	  
-	  <!--
-	  <div class="w3-display-topright w3-container w3-black" style="text-align:center; font-family:monospace">
-        <p id="zoomIn_btn" onclick="zoomIn()" style="cursor:pointer">+</p>
-		<p id="cameraReset_btn" onclick="cameraReset()" style="cursor:pointer">o</p>
-		<p id="zoomOut_btn" onclick="zoomOut()" style="cursor:pointer">-</p>
-      </div>
-	  -->
+		<h2 class="w3-text-black w3-xxlarge" align=left>Customizable ballpoint pen</h2>
+
+		<div class="w3-display-container mySlides">
+
+			<canvas id="product_canvas" style="margin-bottom:-6px"> </canvas>
+			<div class="w3-display-bottomleft w3-container w3-black">
+				<p id="view_description">3D View</p>
+			</div>
+			
+			
+		  
+		  <!--
+		  <div class="w3-display-topright w3-container w3-black" style="text-align:center; font-family:monospace">
+			<p id="zoomIn_btn" onclick="zoomIn()" style="cursor:pointer">+</p>
+			<p id="cameraReset_btn" onclick="cameraReset()" style="cursor:pointer">o</p>
+			<p id="zoomOut_btn" onclick="zoomOut()" style="cursor:pointer">-</p>
+		  </div>
+		  -->
 
 
-    </div>
+		</div>
+		
+		<div class="mySlider">
+			<div class=" w3-black slidecontainer">
+					<input type="range" min="0" max="50" value="0" class="slider" oninput="zoom(1, this.value)">
+			</div>
+			<div class=" w3-black slidecontainer">
+					<input type="range" min="1" max="10" value="1" class="slider" oninput="zoom(2, this.value)" >
+			</div>
+			<div class=" w3-black slidecontainer">
+					<input type="range" min="1" max="10" value="1" class="slider" oninput="zoom(3, this.value)">
+			</div>
+			<div class=" w3-black slidecontainer">
+					<input type="range" min="1" max="10" value="1" class="slider" oninput="zoom(4, this.value)">
+			</div>
+		</div>
+		
+	  </div>
+	  
+	  <!-- Slideshow previews -->
+	  <div class="w3-row-padding w3-section" align=center id="previews">
+
+		<div class="w3-col s3" style="width:20%">
+		  <img class="demo w3-opacity w3-hover-opacity-off
+					  w3-hide-large"
+					  src="images/customize.jpg" style="width:100%;cursor:pointer" onclick="w3_open()" title="Customize">
+		</div>
+		<div class="w3-col s3" style="width:20%">
+		  <img class="demo w3-opacity w3-hover-opacity-off" src="images/3D.jpg" style="width:100%;cursor:pointer" onclick="change_camera(1)" title="3D View">
+		</div>
+		<div class="w3-col s3" style="width:20%">
+		  <img class="w3-border-top w3-border-bottom w3-border-left w3-border-right
+					  w3-border-green demo w3-opacity w3-hover-opacity-off"
+					  src="images/point.jpg" style="width:100%;cursor:pointer" onclick="change_camera(2)" title="Point">
+		</div>
+		<div class="w3-col s3" style="width:20%">
+		  <img class="w3-border-top w3-border-bottom w3-border-left w3-border-right
+					  w3-border-green demo w3-opacity w3-hover-opacity-off"
+					  src="images/body.jpg" style="width:100%;cursor:pointer" onclick="change_camera(3)" title="Body">
+		</div>
+		<div class="w3-col s3" style="width:20%">
+		  <img class="w3-border-top w3-border-bottom w3-border-left w3-border-right
+					  w3-border-green demo w3-opacity w3-hover-opacity-off"
+					  src="images/clip.jpg" style="width:100%;cursor:pointer" onclick="change_camera(4)" title="Clip">
+		</div>
+		
+	  </div>
 	
-	<div class="mySlider">
-		<div class=" w3-black slidecontainer">
-				<input type="range" min="0" max="50" value="0" class="slider" oninput="zoom(1, this.value)">
-		</div>
-		<div class=" w3-black slidecontainer">
-				<input type="range" min="1" max="10" value="1" class="slider" oninput="zoom(2, this.value)" >
-		</div>
-		<div class=" w3-black slidecontainer">
-				<input type="range" min="1" max="10" value="1" class="slider" oninput="zoom(3, this.value)">
-		</div>
-		<div class=" w3-black slidecontainer">
-				<input type="range" min="1" max="10" value="1" class="slider" oninput="zoom(4, this.value)">
-		</div>
 	</div>
+
+	<div class="w3-col s3" style="width:70%;padding-left:25px">
+
+	  <!-- Text under slideshow -->
+	  <div class="w3-container">
+	  
+	  <h3 class="w3-text-green w3-xlarge"><strong>Product description:</strong></h3>
+	  
+	  <div class="w3-container">
+		<h4><strong>A new spin on an old design!</strong></h4>
+		<p>It is you old, beloved ballpoint pen, and it will always be. A round, comfortable and easy-to-grip body. A strong and realiable spring mechanism. A fine point and the right ink, for a seamless writing experience.</p>
+		<p>But everything presented to you in a new style: do you work in a serious office or are you a crazy highschooler? We've got you covered!</p>
+		
+		<h4><strong>Top quality materials only!</strong></h4>
+		<p>Just like any other of our products, the Customizable Ballpoint Pen is made of the best materials to provide an enjoyable, reliable and long-lasting writing experience.</p>
+		<p>Everything, from the atossic plastic, to the environmental-friendly wood, has been chosen to be both beautiful and durable!</p>
+		
+		<h4><strong>Exclusive: made for you!</strong></h4>
+		<p>Choose you combination to fit your style or create the perfect gift for your friend! Stay tuned for special occasions and limited-time styles.</p>
+		</div>
+		
+		<p class="w3-small"><strong>ATTENTION:</strong> The colors in the photos may differ slightly from the real product because of the light setting. The photos and the 3D view are 3D reconstruction of the real product.</p>
+		
+	  </div>  
+
+	  <footer class="w3-container w3-padding-16" style="margin-top:32px">Powered by <a href="https://www.w3schools.com/w3css/default.asp" title="W3.CSS" target="_blank" class="w3-hover-text-green">w3.css</a></footer>
+
+	</div>
+
+	<div class="w3-container w3-display-container w3-padding-16 w3-col s3" style="width:30%;padding-right:25px">
 	
-  </div>
-  
-  <!-- Slideshow previews -->
-  <div class="w3-row-padding w3-section" align=center id="previews">
+		<div class="w3-border-top w3-border-bottom w3-border-left w3-border-right w3-padding w3-border-grey w3-margin-bottom w3-light-grey">
+		<h5><strong>Price</strong></h5>
+		
+		<p>Body:
+		<strong id="body_material_price"></strong></p>
+		
+		<p>Point and clip:
+		<strong id="point_material_price"></strong></p>
+		
+		<p>Quantity:</p>
+		<select id="quantity" class="w3-select" onchange="calculate_price()">
+		  <option selected="selected">1</option>
+		  <script> for (i=2; i<31; i++) { document.write("<option>"+i+"</option>"); } </script>
+		</select>
+		
+		<h5 >Total:<br>
+		<strong class="w3-xxlarge w3-text-green" id="total_price"></strong></h5>
+		
+		<div align=center><button type="button" class="w3-button w3-red"> Add to cart </button></div>
+		
+		</div>
 	
-    <div class="w3-col s3" style="width:20%">
-      <img class="demo w3-opacity w3-hover-opacity-off" src="/images/3D.jpg" style="width:100%;cursor:pointer" onclick="change_camera(1)" title="3D View">
-    </div>
-    <div class="w3-col s3" style="width:20%">
-      <img class="w3-border-top w3-border-bottom w3-border-left w3-border-right
-	              w3-border-green demo w3-opacity w3-hover-opacity-off"
-				  src="/images/point.jpg" style="width:100%;cursor:pointer" onclick="change_camera(2)" title="Point">
-    </div>
-	<div class="w3-col s3" style="width:20%">
-      <img class="w3-border-top w3-border-bottom w3-border-left w3-border-right
-	              w3-border-green demo w3-opacity w3-hover-opacity-off"
-				  src="/images/body.jpg" style="width:100%;cursor:pointer" onclick="change_camera(3)" title="Body">
-    </div>
-	<div class="w3-col s3" style="width:20%">
-      <img class="w3-border-top w3-border-bottom w3-border-left w3-border-right
-	              w3-border-green demo w3-opacity w3-hover-opacity-off"
-				  src="/images/clip.jpg" style="width:100%;cursor:pointer" onclick="change_camera(4)" title="Clip">
-    </div>
-  </div>
-
-  <!-- Text under slideshow -->
-  <div class="w3-container">
-    
-    <h4><strong>Extra Info</strong></h4>
-    <p>Our apartment is really clean and we like to keep it that way. Enjoy the lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-    <hr>
-    
-    <h4><strong>Rules</strong></h4>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-    <p>Subscribe to receive updates on available dates and special offers.</p>
-  </div>  
-
-  <footer class="w3-container w3-padding-16" style="margin-top:32px">Powered by <a href="https://www.w3schools.com/w3css/default.asp" title="W3.CSS" target="_blank" class="w3-hover-text-green">w3.css</a></footer>
-
-<!-- End page content -->
-
-<!-- END MAIN -->
+	</div>
 </div>
 
+</div> <!-- End stuff to push down -->
+  
+<!-- End page content -->
+
+
+<!-- END MAIN -->
+
+
 <script>
+var body_price = 0.20;
+var point_price = 0.20;
+
 // Get the Sidebar
 var mySidebar = document.getElementById("mySidebar");
 
@@ -323,19 +391,49 @@ function changeMaterial(n){
 		case 0:
 			var selector= document.getElementById('bodyMat');
 			var itemvalue= selector.options[selector.selectedIndex].text;
-			if (itemvalue==='Plastic') Object.assign(bodyParts_uniforms, uniforms_plastic);
-			if (itemvalue==='Woven') Object.assign(bodyParts_uniforms, uniforms_fabric);
-			if (itemvalue==='Metal') Object.assign(bodyParts_uniforms, uniforms_smoothMetal);
-			if (itemvalue==='Wood') Object.assign(bodyParts_uniforms, uniforms_wood);
+			if (itemvalue==='Plastic') {
+				Object.assign(bodyParts_uniforms, uniforms_plastic);
+				body_price = 1.0;
+			}
+			if (itemvalue==='Woven') {
+				Object.assign(bodyParts_uniforms, uniforms_fabric);
+				body_price = 3.0;
+			}
+			if (itemvalue==='Metal') {
+				Object.assign(bodyParts_uniforms, uniforms_smoothMetal);
+				body_price = 2.0;
+			}
+			if (itemvalue==='Wood') {
+				Object.assign(bodyParts_uniforms, uniforms_wood);
+				body_price = 4.0;
+			}
+			document.getElementById("body_material_price").innerHTML = itemvalue + "<br><strong class='w3-text-green w3-xlarge'>" + body_price.toFixed(2) + " €</strong>";
 			break;
 		case 1:
 			var selector= document.getElementById('accentMat');
 			var itemvalue= selector.options[selector.selectedIndex].text;
-			if (itemvalue==='Plastic') Object.assign(accentParts_uniforms, uniforms_plastic);
-			if (itemvalue==='Metal') Object.assign(accentParts_uniforms, uniforms_smoothMetal);
-			if (itemvalue==='Wood') Object.assign(accentParts_uniforms, uniforms_wood);
+			if (itemvalue==='Plastic') {
+				Object.assign(accentParts_uniforms, uniforms_plastic);
+				point_price = 0.5;
+			}
+			if (itemvalue==='Metal') {
+				Object.assign(accentParts_uniforms, uniforms_smoothMetal);
+				point_price = 0.6;
+			}
+			if (itemvalue==='Wood') {
+				Object.assign(accentParts_uniforms, uniforms_wood);
+				point_price = 1.0;
+			}
+			document.getElementById("point_material_price").innerHTML = itemvalue + "<br><strong class='w3-text-green w3-xlarge'>" + point_price.toFixed(2) + " €</strong>";
 			break;
 	}
+	calculate_price();
+}
+
+function calculate_price(){
+	var selector = document.getElementById('quantity');
+	var qty= selector.options[selector.selectedIndex].text;
+	document.getElementById("total_price").innerHTML = ((body_price+point_price)*qty).toFixed(2) + " €";
 }
 	
 

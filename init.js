@@ -11,7 +11,7 @@ var generic_vs, generic_fs;
 var loaded_shaders = false;
 
 function Init() {
-	
+
 container = document.getElementById("main_div");
 canvas = document.getElementById("product_canvas");
 canvas2 = document.getElementById("point_canvas");

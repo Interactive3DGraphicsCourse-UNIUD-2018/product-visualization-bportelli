@@ -43,3 +43,6 @@ outRadiance = BRDF + luce ambientale per i materiali dielettrici + riflesso spec
 
 30/07/2018
 - Modificato meccanismo di zoom (slider). Mantenere lo zoom anche nelle visualizzazioni statiche (camera2-camera4)?
+
+23/07/2018
+- Modificato il layout della pagina e aggiunto descrizione e prezzo prodotto.
